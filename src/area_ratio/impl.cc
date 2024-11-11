@@ -1,4 +1,5 @@
 #include "impls.h"
+#include <opencv2/opencv.hpp>
 
 
 float compute_area_ratio(const std::vector<cv::Point>& contour) {
@@ -13,5 +14,16 @@ float compute_area_ratio(const std::vector<cv::Point>& contour) {
      * 通过条件:
      * 运行测试点，通过即可。
      */
-    return 0.f;
+    
+ double contourArea = cv::contourArea(contour);
+    // 找到轮廓的最小外接矩形
+    cv::RotatedRect minRect = cv::minAreaRect(contour);
+    // 计算最小外接矩形的面积
+   double rectArea = minRect.size.width * minRect.size.height;
+
+    float ratio = static_cast<float>(contourArea / rectArea);
+    
+    return ratio;
 }
+
+ 

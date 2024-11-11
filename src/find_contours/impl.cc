@@ -1,5 +1,5 @@
 #include "impls.h"
-
+#include <opencv2/opencv.hpp>
 
 std::vector<std::vector<cv::Point>> find_contours(const cv::Mat& input) {
     /**
@@ -19,5 +19,33 @@ std::vector<std::vector<cv::Point>> find_contours(const cv::Mat& input) {
     
     std::vector<std::vector<cv::Point>> res;
     // IMPLEMENT YOUR CODE HERE
-    return res;
+    
+    std::vector<std::vector<cv::Point>> contours;
+    std::vector<cv::Vec4i> hierarchy;
+    cv::Mat gray, binary;
+
+    
+    cv::cvtColor(input, gray, cv::COLOR_BGR2GRAY);
+
+    
+    cv::threshold(gray, binary, 100, 255, cv::THRESH_BINARY);
+
+    
+    cv::findContours(binary, contours, hierarchy, cv::RETR_CCOMP, cv::CHAIN_APPROX_SIMPLE);
+
+    
+    std::vector<std::vector<cv::Point>> innerContours;
+    for (size_t i = 0; i < contours.size(); i++) {
+        
+        if (hierarchy[i][3] == -1) {
+            innerContours.push_back(contours[i]);
+        }
+    }
+
+    return innerContours; 
 }
+
+
+
+
+   

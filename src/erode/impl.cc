@@ -1,5 +1,5 @@
 #include "impls.h"
-
+#include <opencv2/opencv.hpp>
 
 std::vector<cv::Mat> erode(const cv::Mat& src_erode, const cv::Mat& src_dilate) {
     /**
@@ -43,9 +43,25 @@ std::vector<cv::Mat> erode(const cv::Mat& src_erode, const cv::Mat& src_dilate) 
      *     2. dilate 之后的图像中，图中的小脚被消除了(类似答案中的样子)
      *     以上两个检查点需要自己检查，满足条件 则输入 p 通过, 否则输入 f 表示不通过
      */
-    cv::Mat dst_erode, dst_dilate;
+    
+  cv::Mat gray, binary, dst_erode, dst_dilate;
 
-    // TODO: 在这里实现你的代码
+    
+    cv::cvtColor(src_erode, gray, cv::COLOR_BGR2GRAY);
+
+    
+    cv::threshold(gray, binary, 50, 255, cv::THRESH_BINARY);
+
+    
+    cv::Mat element = cv::getStructuringElement(cv::MORPH_RECT, cv::Size(6, 6));
+
+    
+    cv::erode(binary, dst_erode, element, cv::Point(-1, -1), 1, cv::BORDER_CONSTANT, cv::morphologyDefaultBorderValue());
+
+    
+    cv::dilate(binary, dst_dilate, element, cv::Point(-1, -1), 1, cv::BORDER_CONSTANT, cv::morphologyDefaultBorderValue());
+
+   
 
     return {dst_erode, dst_dilate};
 }

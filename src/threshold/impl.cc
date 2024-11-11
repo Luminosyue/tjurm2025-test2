@@ -1,6 +1,6 @@
 #include "impls.h"
-
-
+#include <opencv2/opencv.hpp>
+#include <vector>
 std::vector<cv::Mat> threshold(const cv::Mat& src, int threshold_value) {
     /**
      * TODO: 将一个彩色图片转换为二值化图
@@ -28,6 +28,10 @@ std::vector<cv::Mat> threshold(const cv::Mat& src, int threshold_value) {
     cv::Mat gray, dst;
 
     // TODO: 实现代码
-
+    std::vector<cv::Mat> result;
+    cv::cvtColor(src, gray, cv::COLOR_BGR2GRAY);
+    cv::threshold(gray, dst, threshold_value, 255, cv::THRESH_BINARY);
+    result.push_back(gray);
+    result.push_back(dst);
     return {gray, dst};
 }

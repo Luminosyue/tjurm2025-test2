@@ -1,5 +1,6 @@
 #include "impls.h"
 #include <unordered_map>
+#include <opencv2/opencv.hpp>
 
 
 std::unordered_map<int, cv::Rect> roi_color(const cv::Mat& input) {
@@ -30,6 +31,54 @@ std::unordered_map<int, cv::Rect> roi_color(const cv::Mat& input) {
      */
     std::unordered_map<int, cv::Rect> res;
     // IMPLEMENT YOUR CODE HERE
+    cv::Mat gray;
+    cv::cvtColor(input, gray, cv::COLOR_BGR2GRAY);
+
+    
+    cv::Mat binary;
+    cv::threshold(gray, binary, 0, 255, cv::THRESH_BINARY_INV | cv::THRESH_OTSU);
+
+    
+    std::vector<std::vector<cv::Point>> contours;
+    cv::findContours(binary, contours, cv::RETR_EXTERNAL, cv::CHAIN_APPROX_SIMPLE);
+
+    
+    for (size_t i = 0; i < contours.size(); i++) {
+        cv::Rect rect = cv::boundingRect(contours[i]);
+
+        
+        cv::Mat roi = input(rect);
+        int color = -1;
+        int blue = 0, green = 0, red = 0;
+
+       
+        for (int y = 0; y < roi.rows; y++) {
+            for (int x = 0; x < roi.cols; x++) {
+                cv::Vec3b pixel = roi.at<cv::Vec3b>(y, x);
+                blue += pixel[0];
+                green += pixel[1];
+                red += pixel[2];
+            }
+        }
+        int area = roi.rows * roi.cols;
+        blue /= area; 
+        green /= area; 
+        red /= area;
+
+       
+        if (blue > green && blue > red) {
+            color = 0; // Blue
+        } else if (green > blue && green > red) {
+            color = 1; // Green
+        } else if (red > blue && red > green) {
+            color = 2; // Red
+        }
+
+       
+        if (color != -1) {
+            res[color] = rect;
+        }
+    }
 
     return res;
 }
