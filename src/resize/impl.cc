@@ -20,20 +20,20 @@ cv::Mat my_resize(const cv::Mat& input, float scale) {
    
   for (int i = 0; i < new_rows; ++i) {
         for (int j = 0; j < new_cols; ++j) {
-            // 计算对应的原图像中的最近邻像素位置
+            
             float x = j / scale;
             float y = i / scale;
 
-            // 四舍五入到最近的整数，因为我们使用的是最近邻插值
+            
             int x_nearest = static_cast<int>(round(x));
             int y_nearest = static_cast<int>(round(y));
 
-            // 检查边界条件，确保不越界
+            
             if (x_nearest < input.cols && y_nearest < input.rows) {
-                // 使用最近邻插值，将原图像中对应的像素值赋给新图像
-                if (input.channels() == 3) { // 彩色图像
+                
+                if (input.channels() == 3) { 
                     output.at<cv::Vec3b>(i, j) = input.at<cv::Vec3b>(y_nearest, x_nearest);
-                } else { // 灰度图像
+                } else { 
                     output.at<uchar>(i, j) = input.at<uchar>(y_nearest, x_nearest);
                 }
             }

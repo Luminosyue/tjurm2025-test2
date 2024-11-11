@@ -16,9 +16,9 @@ float compute_area_ratio(const std::vector<cv::Point>& contour) {
      */
     
  double contourArea = cv::contourArea(contour);
-    // 找到轮廓的最小外接矩形
+    
     cv::RotatedRect minRect = cv::minAreaRect(contour);
-    // 计算最小外接矩形的面积
+    
    double rectArea = minRect.size.width * minRect.size.height;
 
     float ratio = static_cast<float>(contourArea / rectArea);
