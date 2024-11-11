@@ -31,5 +31,5 @@ bool test_compute_iou() {
             return false;
         }
     }
-    return true;//s
+    return true;
 }
