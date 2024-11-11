@@ -26,4 +26,4 @@ float compute_area_ratio(const std::vector<cv::Point>& contour) {
     return ratio;
 }
 
- 
+ //s
